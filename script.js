@@ -6,7 +6,12 @@ baseRowContainer.style.display = "flex";
 const basePixel = document.createElement("div");
 basePixel.classList.add("pixel");
 
-let gridLength = 16;
+let paintMode;
+
+sketchpadContainer.addEventListener("mousedown", () => paintMode = true);
+sketchpadContainer.addEventListener("mouseup", () => paintMode = false);
+
+let gridLength = 50;
 
 for(let i = 0; i < gridLength; i++){
 
@@ -16,7 +21,11 @@ for(let i = 0; i < gridLength; i++){
 
         const clonePixel = basePixel.cloneNode();
 
-        clonePixel.addEventListener("mouseover" , () => clonePixel.style.backgroundColor = "black");
+        clonePixel.addEventListener("mouseover" , () => {
+
+            if(paintMode) clonePixel.style.backgroundColor = "black";
+  
+        });
 
         cloneRowContainer.appendChild(clonePixel);
         
@@ -25,6 +34,8 @@ for(let i = 0; i < gridLength; i++){
     sketchpadContainer.appendChild(cloneRowContainer);
 
 }
+
+
 
 
 
