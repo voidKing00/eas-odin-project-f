@@ -1,4 +1,33 @@
-const sketchpadContainer = document.querySelector("#sketchpad-container");
+function createCanvas(gridSize){
+
+    for(let i = 0; i < gridSize; i++){
+
+        const cloneRowContainer = baseRowContainer.cloneNode();
+    
+        for(let j = 0; j < gridSize; j++){
+    
+            const clonePixel = basePixel.cloneNode();
+    
+            clonePixel.addEventListener("mouseover" , () => {
+    
+                if(paintMode) clonePixel.style.backgroundColor = "black";
+      
+            });
+    
+            cloneRowContainer.appendChild(clonePixel);
+            
+        }
+    
+        sketchpadContainer.appendChild(cloneRowContainer);
+    
+    }
+}
+
+const DEFAULT_GRID_SIZE = 16;
+
+let sketchpadContainer = document.createElement("div");
+sketchpadContainer.classList.add("sketchpad-container");
+document.body.appendChild(sketchpadContainer);
 
 const baseRowContainer = document.createElement("div");
 baseRowContainer.style.display = "flex";
@@ -7,35 +36,50 @@ const basePixel = document.createElement("div");
 basePixel.classList.add("pixel");
 
 let paintMode;
-
+createCanvas(DEFAULT_GRID_SIZE);
 sketchpadContainer.addEventListener("mousedown", () => paintMode = true);
 sketchpadContainer.addEventListener("mouseup", () => paintMode = false);
 
-let gridLength = 50;
+const inputBar = document.querySelector("#grid-size-input");
+const button = document.querySelector("button");
 
-for(let i = 0; i < gridLength; i++){
+button.addEventListener("click", () =>{
 
-    const cloneRowContainer = baseRowContainer.cloneNode();
+    let gridSize = parseInt(inputBar.value);
 
-    for(let i = 0; i < gridLength; i++){
+    if(gridSize < 1){
 
-        const clonePixel = basePixel.cloneNode();
+        inputBar.value = "";
+        alert("Size cant be less than 1");
+        return;
 
-        clonePixel.addEventListener("mouseover" , () => {
+    }else if(gridSize > 100){
 
-            if(paintMode) clonePixel.style.backgroundColor = "black";
-  
-        });
+        inputBar.value = "";
+        alert("Size cant be greater than 100");
+        return;
 
-        cloneRowContainer.appendChild(clonePixel);
-        
+    }else if(isNaN(gridSize)){
+
+        alert("Size cannot be empty")
+        return;
+
     }
+    
+    inputBar.value = "";
 
-    sketchpadContainer.appendChild(cloneRowContainer);
+    document.body.removeChild(sketchpadContainer);
 
-}
+    sketchpadContainer = document.createElement("div");
+    sketchpadContainer.classList.add("sketchpad-container");
+    sketchpadContainer.addEventListener("mousedown", () => paintMode = true);
+    sketchpadContainer.addEventListener("mouseup", () => paintMode = false);
 
+    document.body.appendChild(sketchpadContainer);
 
+    createCanvas(gridSize);
+    
+})
 
 
 
